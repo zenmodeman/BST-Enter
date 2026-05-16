@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pokemon Stat Guess</title>
+  </head>
+  <body>
+    <main>
+      <h1>Pokemon Stat Guess</h1>
+
+      <section>
+        <button id="infiniteModeButton" type="button">Infinite mode</button>
+        <button id="dailyModeButton" type="button">Daily mode</button>
+      </section>
+
+      <section>
+        <h2 id="modeTitle">Infinite mode</h2>
+        <p id="modeSummary"></p>
+        <p id="scoreSummary"></p>
+      </section>
+
+      <section id="quizArea" hidden>
+        <h2 id="pokemonName"></h2>
+        <img id="pokemonImage" alt="" width="240" height="240">
+        <p id="pokemonMeta"></p>
+
+        <form id="guessForm">
+          <fieldset>
+            <legend>Enter base stats</legend>
+
+            <p>
+              <label for="hpInput">HP</label>
+              <input id="hpInput" name="hp" type="number" min="0" max="255" required>
+            </p>
+
+            <p>
+              <label for="attackInput">Attack</label>
+              <input id="attackInput" name="attack" type="number" min="0" max="255" required>
+            </p>
+
+            <p>
+              <label for="defenseInput">Defense</label>
+              <input id="defenseInput" name="defense" type="number" min="0" max="255" required>
+            </p>
+
+            <p>
+              <label for="specialAttackInput">Special Attack</label>
+              <input id="specialAttackInput" name="special_attack" type="number" min="0" max="255" required>
+            </p>
+
+            <p>
+              <label for="specialDefenseInput">Special Defense</label>
+              <input id="specialDefenseInput" name="special_defense" type="number" min="0" max="255" required>
+            </p>
+
+            <p>
+              <label for="speedInput">Speed</label>
+              <input id="speedInput" name="speed" type="number" min="0" max="255" required>
+            </p>
+          </fieldset>
+
+          <button type="submit">Submit guess</button>
+        </form>
+
+        <section id="resultArea" hidden>
+          <h3 id="roundScore"></h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Stat</th>
+                <th>Your guess</th>
+                <th>Actual</th>
+                <th>Percent</th>
+              </tr>
+            </thead>
+            <tbody id="resultRows"></tbody>
+          </table>
+          <p id="actualBst"></p>
+          <button id="nextButton" type="button">Next Pokemon</button>
+        </section>
+      </section>
+
+      <p id="statusMessage">Loading Pokemon data...</p>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
