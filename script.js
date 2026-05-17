@@ -34,6 +34,7 @@ const elements = {
   pokemonImage: document.querySelector("#pokemonImage"),
   pokemonMeta: document.querySelector("#pokemonMeta"),
   guessForm: document.querySelector("#guessForm"),
+  projectedBst: document.querySelector("#projectedBst"),
   resultArea: document.querySelector("#resultArea"),
   roundScore: document.querySelector("#roundScore"),
   resultRows: document.querySelector("#resultRows"),
@@ -54,6 +55,7 @@ async function start() {
 
     elements.infiniteModeButton.addEventListener("click", () => setMode("infinite"));
     elements.dailyModeButton.addEventListener("click", () => setMode("daily"));
+    elements.guessForm.addEventListener("input", updateProjectedBst);
     elements.guessForm.addEventListener("submit", handleGuessSubmit);
     elements.nextButton.addEventListener("click", showNextPokemon);
 
@@ -136,12 +138,24 @@ function renderPokemon() {
 
 function clearGuessForm() {
   elements.guessForm.reset();
+  updateProjectedBst();
 
   for (const input of elements.guessForm.elements) {
     if (input instanceof HTMLInputElement) {
       input.disabled = false;
     }
   }
+}
+
+function updateProjectedBst() {
+  const total = STAT_DEFINITIONS.reduce((sum, [statKey]) => {
+    const input = elements.guessForm.elements[statKey];
+    const value = input.value === "" ? 0 : Number(input.value);
+
+    return Number.isFinite(value) ? sum + value : sum;
+  }, 0);
+
+  elements.projectedBst.textContent = `Projected BST: ${total}`;
 }
 
 function handleGuessSubmit(event) {
