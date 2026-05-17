@@ -1,12 +1,12 @@
 "use strict";
 
 const STAT_DEFINITIONS = [
-  ["hp", "HP"],
-  ["attack", "Attack"],
-  ["defense", "Defense"],
-  ["special_attack", "Special Attack"],
-  ["special_defense", "Special Defense"],
-  ["speed", "Speed"],
+  ["hp", "HP", "HP"],
+  ["attack", "Attack", "Atk"],
+  ["defense", "Defense", "Def"],
+  ["special_attack", "Special Attack", "SpAtk"],
+  ["special_defense", "Special Defense", "SpDef"],
+  ["speed", "Speed", "Speed"],
 ];
 
 const MAX_STAT_VALUE = 255;
@@ -227,9 +227,10 @@ function sumGuessStats(guesses) {
 }
 
 function buildDeviationSummary(pokemon, guesses) {
-  return STAT_DEFINITIONS.map(([statKey]) => {
+  return STAT_DEFINITIONS.map(([statKey, , shortLabel]) => {
     const deviation = guesses[statKey] - pokemon.base_stats[statKey];
-    return deviation > 0 ? `+${deviation}` : String(deviation);
+    const signedDeviation = deviation > 0 ? `+${deviation}` : String(deviation);
+    return `${signedDeviation} ${shortLabel}`;
   });
 }
 
