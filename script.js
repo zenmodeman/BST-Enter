@@ -83,7 +83,7 @@ function setMode(mode) {
 }
 
 function buildDailyPool() {
-  const rng = mulberry32(xmur3(getLocalDateSeed())());
+  const rng = mulberry32(xmur3(getUtcDateSeed())());
   const pool = [...state.pokemon];
 
   for (let i = pool.length - 1; i > 0; i -= 1) {
@@ -94,13 +94,17 @@ function buildDailyPool() {
   return pool.slice(0, DAILY_COUNT);
 }
 
-function getLocalDateSeed() {
+function getUtcDateSeed() {
   const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
+  const year = now.getUTCFullYear();
+  const month = String(now.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(now.getUTCDate()).padStart(2, "0");
 
   return `pokemon-stat-guess-${year}-${month}-${day}`;
+}
+
+function getDisplayDateSeed() {
+  return `${getUtcDateSeed()}-UTC`;
 }
 
 function showNextPokemon() {
@@ -245,7 +249,7 @@ function buildCell(text) {
 
 function updateSummary() {
   if (state.mode === "daily") {
-    elements.modeSummary.textContent = `Daily seed: ${getLocalDateSeed()}. Pokemon ${state.dailyIndex} of ${DAILY_COUNT}.`;
+    elements.modeSummary.textContent = `Daily seed: ${getDisplayDateSeed()}. Pokemon ${state.dailyIndex} of ${DAILY_COUNT}.`;
   } else {
     elements.modeSummary.textContent = "Random Pokemon will continue until you stop.";
   }
