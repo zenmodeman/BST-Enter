@@ -12,12 +12,14 @@ const STAT_DEFINITIONS = [
 const MAX_STAT_VALUE = 255;
 const MAX_ROUND_SCORE = 600;
 const DAILY_COUNT = 5;
+const SITE_URL = "https://zenmodeman.github.io/BST-Enter/";
 
 const state = {
   pokemon: [],
   mode: "infinite",
   dailyPool: [],
   dailyIndex: 0,
+  dailyResults: [],
   currentPokemon: null,
   answered: 0,
   totalScore: 0,
@@ -27,8 +29,11 @@ const elements = {
   infiniteModeButton: document.querySelector("#infiniteModeButton"),
   dailyModeButton: document.querySelector("#dailyModeButton"),
   modeTitle: document.querySelector("#modeTitle"),
+  modeDescription: document.querySelector("#modeDescription"),
   modeSummary: document.querySelector("#modeSummary"),
   scoreSummary: document.querySelector("#scoreSummary"),
+  shareResultsButton: document.querySelector("#shareResultsButton"),
+  shareStatus: document.querySelector("#shareStatus"),
   quizArea: document.querySelector("#quizArea"),
   pokemonName: document.querySelector("#pokemonName"),
   pokemonImage: document.querySelector("#pokemonImage"),
@@ -40,6 +45,8 @@ const elements = {
   resultRows: document.querySelector("#resultRows"),
   actualBst: document.querySelector("#actualBst"),
   nextButton: document.querySelector("#nextButton"),
+  dailyResultsArea: document.querySelector("#dailyResultsArea"),
+  dailyResultsList: document.querySelector("#dailyResultsList"),
   statusMessage: document.querySelector("#statusMessage"),
 };
 
@@ -58,6 +65,7 @@ async function start() {
     elements.guessForm.addEventListener("input", updateProjectedBst);
     elements.guessForm.addEventListener("submit", handleGuessSubmit);
     elements.nextButton.addEventListener("click", showNextPokemon);
+    elements.shareResultsButton.addEventListener("click", shareResults);
 
     elements.quizArea.hidden = false;
     elements.statusMessage.hidden = true;
@@ -74,12 +82,27 @@ function setMode(mode) {
   state.answered = 0;
   state.totalScore = 0;
   state.dailyIndex = 0;
+  state.dailyResults = [];
   state.dailyPool = mode === "daily" ? buildDailyPool() : [];
 
   elements.modeTitle.textContent = mode === "daily" ? "Daily mode" : "Infinite mode";
+  elements.modeDescription.textContent =
+    mode === "daily"
+      ? "Daily mode gives everyone the same five Pokemon for the current UTC date."
+      : "Infinite mode gives random Pokemon indefinitely. Use Daily mode when you want the shared five-Pokemon challenge.";
   elements.nextButton.textContent = "Next Pokemon";
+  elements.shareStatus.textContent = "";
+  updateModeButtons();
+  renderDailyResults();
   updateSummary();
   showNextPokemon();
+}
+
+function updateModeButtons() {
+  elements.dailyModeButton.classList.toggle("activeMode", state.mode === "daily");
+  elements.infiniteModeButton.classList.toggle("activeMode", state.mode === "infinite");
+  elements.dailyModeButton.setAttribute("aria-pressed", String(state.mode === "daily"));
+  elements.infiniteModeButton.setAttribute("aria-pressed", String(state.mode === "infinite"));
 }
 
 function buildDailyPool() {
@@ -185,8 +208,29 @@ function handleGuessSubmit(event) {
   state.answered += 1;
   state.totalScore += result.total;
 
+  if (state.mode === "daily") {
+    state.dailyResults.push({
+      pokemon: state.currentPokemon,
+      result,
+      guessBst: sumGuessStats(guesses),
+      deviations: buildDeviationSummary(state.currentPokemon, guesses),
+    });
+    renderDailyResults();
+  }
+
   renderResult(result);
   updateSummary();
+}
+
+function sumGuessStats(guesses) {
+  return STAT_DEFINITIONS.reduce((sum, [statKey]) => sum + guesses[statKey], 0);
+}
+
+function buildDeviationSummary(pokemon, guesses) {
+  return STAT_DEFINITIONS.map(([statKey]) => {
+    const deviation = guesses[statKey] - pokemon.base_stats[statKey];
+    return deviation > 0 ? `+${deviation}` : String(deviation);
+  });
 }
 
 function scoreGuess(pokemon, guesses) {
@@ -256,6 +300,60 @@ function updateSummary() {
 
   const average = state.answered === 0 ? 0 : Math.round(state.totalScore / state.answered);
   elements.scoreSummary.textContent = `Answered: ${state.answered}; Total score: ${state.totalScore}; Average: ${average}/${MAX_ROUND_SCORE}.`;
+}
+
+function renderDailyResults() {
+  elements.dailyResultsArea.hidden = state.mode !== "daily" || state.dailyResults.length === 0;
+  elements.dailyResultsList.replaceChildren();
+
+  for (const entry of state.dailyResults) {
+    const item = document.createElement("li");
+    item.textContent = `${formatPokemonName(entry.pokemon.name)}: ${entry.result.total}/${MAX_ROUND_SCORE} points; deviations (${entry.deviations.join(", ")}); guessed BST ${entry.guessBst}; actual BST ${entry.pokemon.base_stat_total}.`;
+    elements.dailyResultsList.append(item);
+  }
+}
+
+async function shareResults() {
+  const shareText = buildShareText();
+
+  try {
+    await navigator.clipboard.writeText(shareText);
+    elements.shareStatus.textContent = "Results copied.";
+  } catch (error) {
+    elements.shareStatus.textContent = "Copy failed. Select and copy the text below.";
+    showFallbackShareText(shareText);
+  }
+}
+
+function buildShareText() {
+  const average = state.answered === 0 ? 0 : Math.round(state.totalScore / state.answered);
+  const lines = [
+    "Pokemon Stat Guess",
+    `${elements.modeTitle.textContent}: ${elements.modeSummary.textContent}`,
+    `Score: ${state.totalScore}; Average: ${average}/${MAX_ROUND_SCORE}.`,
+  ];
+
+  if (state.mode === "daily") {
+    lines.push(`Daily progress: ${state.answered}/${DAILY_COUNT}.`);
+  }
+
+  lines.push("", SITE_URL);
+  return lines.join("\n");
+}
+
+function showFallbackShareText(shareText) {
+  let textArea = document.querySelector("#shareTextFallback");
+
+  if (!textArea) {
+    textArea = document.createElement("textarea");
+    textArea.id = "shareTextFallback";
+    textArea.readOnly = true;
+    elements.shareStatus.after(textArea);
+  }
+
+  textArea.value = shareText;
+  textArea.focus();
+  textArea.select();
 }
 
 function finishDaily() {

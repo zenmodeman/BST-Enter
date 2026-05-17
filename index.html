@@ -4,26 +4,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pokemon Stat Guess</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=9">
   </head>
   <body>
     <main>
       <h1>Pokemon Stat Guess</h1>
 
-      <section>
+      <section class="modeControls" aria-label="Game mode">
         <button id="infiniteModeButton" type="button">Infinite mode</button>
         <button id="dailyModeButton" type="button">Daily mode</button>
       </section>
 
       <section>
         <h2 id="modeTitle">Infinite mode</h2>
+        <p id="modeDescription"></p>
         <p id="modeSummary"></p>
         <p id="scoreSummary"></p>
-        <p>
-        Play at <a href="https://zenmodeman.github.io/BST-Enter/" target="_blank" rel="noopener">
-           https://zenmodeman.github.io/BST-Enter/
-        </a>
-        </p>
+        <button id="shareResultsButton" type="button">Share Results</button>
+        <p id="shareStatus" aria-live="polite"></p>
       </section>
 
       <section id="quizArea" hidden>
@@ -89,9 +87,14 @@
         </section>
       </section>
 
+      <section id="dailyResultsArea" hidden>
+        <h2>Daily results</h2>
+        <ol id="dailyResultsList"></ol>
+      </section>
+
       <p id="statusMessage">Loading Pokemon data...</p>
     </main>
 
-    <script src="script.js?v=6"></script>
+    <script src="script.js?v=9"></script>
   </body>
 </html>

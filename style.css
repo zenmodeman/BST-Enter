@@ -48,6 +48,30 @@ button + button {
   margin-left: 8px;
 }
 
+.modeControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.modeControls button {
+  min-width: 120px;
+  padding: 8px 12px;
+}
+
+.modeControls button + button {
+  margin-left: 0;
+}
+
+.activeMode {
+  border: 2px solid black;
+  font-weight: 700;
+}
+
+#dailyModeButton:not(.activeMode) {
+  font-weight: 700;
+}
+
 a {
   overflow-wrap: anywhere;
 }
@@ -57,11 +81,28 @@ a {
   margin-bottom: 8px;
 }
 
+#shareStatus {
+  min-height: 1.45em;
+  margin: 8px 0 0;
+}
+
+#shareTextFallback {
+  display: block;
+  width: 100%;
+  min-height: 150px;
+  margin-top: 8px;
+  font: inherit;
+}
+
 #pokemonImage {
   display: block;
   width: min(240px, 100%);
   height: auto;
   margin: 8px 0 16px;
+}
+
+#pokemonImage[hidden] {
+  display: none;
 }
 
 #pokemonMeta {
@@ -129,6 +170,15 @@ td:last-child {
   margin-bottom: 16px;
 }
 
+#dailyResultsList {
+  margin-top: 0;
+  padding-left: 24px;
+}
+
+#dailyResultsList li {
+  margin-bottom: 6px;
+}
+
 @media (max-width: 520px) {
   main {
     width: min(100% - 24px, 760px);
@@ -145,12 +195,6 @@ td:last-child {
 
   button + button {
     margin-left: 0;
-  }
-
-  main > section:first-of-type {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
   }
 
   fieldset {
