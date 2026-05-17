@@ -197,19 +197,19 @@ function scoreGuess(pokemon, guesses) {
     const deviation = Math.abs(actual - guess);
     
     //Using a ratio here in case maxDeviation is adjusted in the future
-    const percent = (Math.max((maxDeviation - deviation), 0) / maxDeviation) * 100;
+    const score = Math.round((Math.max((maxDeviation - deviation), 0) / maxDeviation) * 100);
 
     return {
       label,
       guess,
       actual,
-      percent,
+      score,
     };
   });
 
   return {
     rows,
-    total: Math.round(rows.reduce((sum, row) => sum + row.percent, 0)),
+    total: rows.reduce((sum, row) => sum + row.score, 0),
   };
 }
 
@@ -223,7 +223,7 @@ function renderResult(result) {
       buildCell(row.label),
       buildCell(String(row.guess)),
       buildCell(String(row.actual)),
-      buildCell(`${row.percent.toFixed(2)}%`),
+      buildCell(String(row.score)),
     );
     elements.resultRows.append(tableRow);
   }
