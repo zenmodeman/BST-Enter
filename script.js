@@ -175,9 +175,15 @@ function scoreGuess(pokemon, guesses) {
   const rows = STAT_DEFINITIONS.map(([statKey, label]) => {
     const actual = pokemon.base_stats[statKey];
     const guess = guesses[statKey];
-    const largestPossibleDeviation = Math.max(actual, MAX_STAT_VALUE - actual);
+    
+    //Can be adjusted later if need be, but for now going with the simple value
+    //This will result in every missed stat point losing 1 point
+    const maxDeviation = 100;
+
     const deviation = Math.abs(actual - guess);
-    const percent = ((largestPossibleDeviation - deviation) / largestPossibleDeviation) * 100;
+    
+    //Using a ratio here in case maxDeviation is adjusted in the future
+    const percent = (Math.max((maxDeviation - deviation), 0) / maxDeviation) * 100;
 
     return {
       label,
