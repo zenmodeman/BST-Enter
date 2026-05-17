@@ -1,0 +1,168 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: white;
+  color: black;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.45;
+}
+
+main {
+  width: min(100% - 32px, 760px);
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-bottom: 12px;
+}
+
+section {
+  margin-bottom: 24px;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  padding: 4px 10px;
+}
+
+button + button {
+  margin-left: 8px;
+}
+
+a {
+  overflow-wrap: anywhere;
+}
+
+#scoreSummary,
+#modeSummary {
+  margin-bottom: 8px;
+}
+
+#pokemonImage {
+  display: block;
+  width: min(240px, 100%);
+  height: auto;
+  margin: 8px 0 16px;
+}
+
+#pokemonMeta {
+  margin-bottom: 20px;
+}
+
+fieldset {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 12px 20px;
+  margin: 0 0 16px;
+  padding: 16px;
+}
+
+fieldset p {
+  display: grid;
+  grid-template-columns: 1fr 90px;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+
+input[type="number"] {
+  width: 100%;
+}
+
+#projectedBst {
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+#resultArea {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 640px;
+  margin-bottom: 16px;
+}
+
+th,
+td {
+  padding: 6px 32px 6px 0;
+  text-align: left;
+  white-space: nowrap;
+}
+
+th:first-child,
+td:first-child {
+  min-width: 150px;
+}
+
+th:not(:first-child),
+td:not(:first-child) {
+  min-width: 110px;
+}
+
+th:last-child,
+td:last-child {
+  padding-right: 0;
+}
+
+#actualBst {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 520px) {
+  main {
+    width: min(100% - 24px, 760px);
+    padding-top: 16px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.35rem;
+  }
+
+  button + button {
+    margin-left: 0;
+  }
+
+  main > section:first-of-type {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  fieldset {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+
+  fieldset p {
+    grid-template-columns: 1fr 80px;
+  }
+
+  table {
+    min-width: 560px;
+  }
+}

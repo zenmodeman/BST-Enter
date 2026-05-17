@@ -249,13 +249,13 @@ function buildCell(text) {
 
 function updateSummary() {
   if (state.mode === "daily") {
-    elements.modeSummary.textContent = `Daily seed: ${getDisplayDateSeed()}. Pokemon ${state.dailyIndex} of ${DAILY_COUNT}.`;
+    elements.modeSummary.textContent = `Daily seed: ${getDisplayDateSeed()}; Pokemon ${state.dailyIndex} of ${DAILY_COUNT}.`;
   } else {
     elements.modeSummary.textContent = "Random Pokemon will continue until you stop.";
   }
 
   const average = state.answered === 0 ? 0 : Math.round(state.totalScore / state.answered);
-  elements.scoreSummary.textContent = `Answered: ${state.answered}. Total score: ${state.totalScore}. Average: ${average}/${MAX_ROUND_SCORE}.`;
+  elements.scoreSummary.textContent = `Answered: ${state.answered}; Total score: ${state.totalScore}; Average: ${average}/${MAX_ROUND_SCORE}.`;
 }
 
 function finishDaily() {
