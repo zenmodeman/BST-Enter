@@ -111,9 +111,7 @@ a {
 
 fieldset {
   display: grid;
-  grid-template-columns: repeat(2, minmax(180px, 1fr));
-  grid-template-rows: repeat(3, auto);
-  grid-auto-flow: column;
+  grid-template-columns: 1fr;
   gap: 12px 20px;
   margin: 0 0 16px;
   padding: 16px;
@@ -200,9 +198,6 @@ td:last-child {
   }
 
   fieldset {
-    grid-template-columns: 1fr;
-    grid-template-rows: none;
-    grid-auto-flow: row;
     padding: 12px;
   }
 
