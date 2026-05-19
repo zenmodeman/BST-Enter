@@ -338,7 +338,7 @@ function buildShareText() {
     lines.push(`Daily progress: ${state.answered}/${DAILY_COUNT}.`);
   }
 
-  lines.push("", SITE_URL);
+  lines.push("", `Play at ${SITE_URL}`);
   return lines.join("\n");
 }
 
